@@ -19,4 +19,6 @@ public class UserResource {
         String password = (String) userMap.get("password");
         return firstName + ", " + lastName + ", " + email + ", " + password;
     }
+
+
 }
