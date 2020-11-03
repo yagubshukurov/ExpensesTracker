@@ -27,6 +27,8 @@ public class CategoryRepositoryImpl implements CategoryRepository{
             "WHERE C.USER_ID = ? AND C.CATEGORY_ID = ? GROUP BY C.CATEGORY_ID";
     private static final String SQL_CREATE = "INSERT INTO ET_CATEGORIES (CATEGORY_ID, USER_ID, TITLE, " +
             "DESCRIPTION) VALUES(NEXTVAL('ET_CATEGORIES_SEQ'), ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE ET_CATEGORIES SET TITLE = ?, DESCRIPTION = ? " +
+            "WHERE USER_ID = ? AND CATEGORY_ID = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -65,7 +67,12 @@ public class CategoryRepositoryImpl implements CategoryRepository{
 
     @Override
     public void update(Integer userId, Integer categoryId, Category category) throws EtBadRequestException {
-
+        try {
+            jdbcTemplate.update(SQL_UPDATE, new Object[]{category.getTitle(), category.getDescription(),
+            userId, categoryId});
+        } catch (Exception e) {
+            throw new EtBadRequestException("Invalid Request :*");
+        }
     }
 
     @Override
