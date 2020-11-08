@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,8 +27,9 @@ public class TransactionResource {
         Double amount = Double.valueOf(transactionMap.get("amount").toString());
         String note = (String) transactionMap.get("note");
         Long transactionDate = (Long) transactionMap.get("transactionDate");
-        Transaction transaction = transactionService.addTransaction(userId, categoryId, amount, note,
-                transactionDate);
+        Transaction transaction = transactionService.addTransaction(userId, categoryId, amount, note, transactionDate);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
+
+
 }
