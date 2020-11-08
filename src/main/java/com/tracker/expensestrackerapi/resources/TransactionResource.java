@@ -19,6 +19,24 @@ public class TransactionResource {
     @Autowired
     TransactionService transactionService;
 
+    @GetMapping("")
+    public ResponseEntity<List<Transaction>> getAllTransactions(HttpServletRequest request,
+                                                                @PathVariable("categoryId") Integer categoryId) {
+        int userId = (Integer) request.getAttribute("userId");
+        List<Transaction> transaction = transactionService.fetchAllTransactions(userId, categoryId);
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+    @GetMapping("{transactionId}")
+    public ResponseEntity<Transaction> getTransactionById(HttpServletRequest request,
+                                                          @PathVariable("categoryId") Integer categoryId,
+                                                          @PathVariable("transactionId") Integer transactionId) {
+        int userId = (Integer) request.getAttribute("userId");
+        Transaction transaction = transactionService.fetchTransactionById(userId, categoryId, transactionId);
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
+
     @PostMapping("")
     public ResponseEntity<Transaction> addTransaction(HttpServletRequest request,
                                                       @PathVariable("categoryId") Integer categoryId,
@@ -31,5 +49,15 @@ public class TransactionResource {
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
 
-
+    @PutMapping("/{transactionId}")
+    public ResponseEntity<Map<String, Boolean>> updateTransaction(HttpServletRequest request,
+                                                         @PathVariable("categoryId") Integer categoryId,
+                                                         @PathVariable("transactionId") Integer transactionId,
+                                                                  @RequestBody Transaction transaction) {
+        int userId = (Integer) request.getAttribute("userId");
+        transactionService.updateTransaction(userId, categoryId, transactionId, transaction);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 }
